@@ -1,4 +1,6 @@
 from fastapi import FastAPI
+from fastapi import HTTPException
+from starlette.responses import JSONResponse
 from models import Pet,PetResponse
 from typing import List
 
@@ -41,3 +43,17 @@ async def root():
 @app.get("/hello/{name}")
 async def say_hello(name: str):
     return {"message": f"Hello {name}"}
+
+@app.exception_handler(HTTPException)
+async def http_exception_handler(request,exc):
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={
+            "message":"Carambas, algo fallo"
+        },
+    )
+
+
+@app.get("/error")
+async def raise_exception():
+    raise HTTPException(status_code=400)
