@@ -10,4 +10,8 @@ class Pet(BaseModel):
     #https: // docs.pydantic.dev / latest / concepts / fields /
 
 
+class PetResponse(BaseModel):
+    name:str
+    kind:str
+
 
