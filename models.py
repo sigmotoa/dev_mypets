@@ -1,9 +1,13 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 class Pet(BaseModel):
-    name:str
-    breed:str
-    birth:int
-    kind:str
+    name:str = Field(..., min_length=3, max_length=20)
+    breed:str = Field(...,min_length=3,max_length=25)
+    birth:int = Field(...,gt=2020,lt=2025)
+    kind:str = Field(...,min_length=3,max_length=25)
+
+    #For more info for validations look at:
+    #https: // docs.pydantic.dev / latest / concepts / fields /
+
 
 
