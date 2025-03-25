@@ -4,8 +4,10 @@ from models import Pet,PetResponse
 app = FastAPI()
 
 
+pets=list[Pet]
 @app.post("/pet")
 async def create_pet(pet:Pet):
+    pets.append(pet)
     return pet
 
 
