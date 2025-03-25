@@ -1,11 +1,12 @@
 from fastapi import FastAPI
 from models import Pet,PetResponse
+from typing import List
 
 app = FastAPI()
 
 
-pets=list[Pet]
-@app.post("/pet")
+pets:List[Pet]=[]
+@app.post("/pet", response_model=Pet)
 async def create_pet(pet:Pet):
     pets.append(pet)
     return pet
@@ -13,7 +14,8 @@ async def create_pet(pet:Pet):
 
 @app.get("/allpets", response_model=list[PetResponse])
 async def show_all_pets():
-    return [
+    return pets
+    '''return [
         {
             "id":1,
             "name":"chispas",
@@ -29,7 +31,8 @@ async def show_all_pets():
             "name":"elefante",
             "kind":"dog"
         }
-    ]
+    ]'''
+
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
