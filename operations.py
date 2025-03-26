@@ -14,3 +14,14 @@ def read_all_pets():
         )
 
         return [PetWithId(**row) for row in reader]
+
+
+##Show a pet by the ID
+def read_one_pet(pet_id):
+    with open(DATABASE_FILENAME) as csvfile:
+        reader=csv.DictReader(
+            csvfile,
+        )
+        for row in reader:
+            if int(row["id"])==pet_id:
+                return PetWithId(**row)
