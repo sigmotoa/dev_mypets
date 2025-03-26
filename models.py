@@ -5,6 +5,10 @@ class Pet(BaseModel):
     breed:str = Field(...,min_length=3,max_length=25)
     birth:int = Field(...,gt=2020,lt=2025)
     kind:str = Field(...,min_length=3,max_length=25)
+    female:bool=Field(...)
+
+class PetWithId(Pet):
+    id:int
 
     #For more info for validations look at:
     #https: // docs.pydantic.dev / latest / concepts / fields /
