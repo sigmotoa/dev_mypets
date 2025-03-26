@@ -1,0 +1,4 @@
+id,name,breed,birth,kind,female
+1,Cometa,criollo,2022,dog,false
+2,Parky,criollo,2020,dog,false
+3,Agata,gato,2019,cat,true
