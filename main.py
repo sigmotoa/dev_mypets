@@ -1,21 +1,23 @@
 from fastapi import FastAPI
 from fastapi import HTTPException
 from starlette.responses import JSONResponse
-from models import Pet,PetResponse
+from models import Pet,PetResponse,PetWithId
+from operations import read_all_pets
 from typing import List
 
 app = FastAPI()
 
 
-pets:List[Pet]=[]
+#pets:List[Pet]=[]
 @app.post("/pet", response_model=Pet)
 async def create_pet(pet:Pet):
-    pets.append(pet)
+    #pets.append(pet)
     return pet
 
 
-@app.get("/allpets", response_model=list[PetResponse])
+@app.get("/allpets", response_model=list[PetWithId])
 async def show_all_pets():
+    pets=read_all_pets()
     return pets
     '''return [
         {

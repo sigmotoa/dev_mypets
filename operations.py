@@ -1,6 +1,6 @@
 import csv
 from typing import Optional
-from models import *
+from models import Pet,PetWithId
 
 DATABASE_FILENAME = "pets.csv"
 column_fields = ["id", "name", "breed", "birth", "kind", "female"]
