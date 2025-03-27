@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi import HTTPException
 from starlette.responses import JSONResponse
 from models import Pet,PetResponse,PetWithId
-from operations import read_all_pets
+from operations import *
 from typing import List
 
 app = FastAPI()
@@ -36,6 +36,15 @@ async def show_all_pets():
             "kind":"dog"
         }
     ]'''
+
+
+@app.get("/pet/{pet_id}")
+async def show_pet(pet_id:int):
+    pet= read_one_pet(pet_id)
+    if not pet:
+        raise HTTPException(status_code=404, detail="Pet doesnt found")
+    return pet
+
 
 @app.get("/")
 async def root():
