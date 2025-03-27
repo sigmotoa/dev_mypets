@@ -9,16 +9,17 @@ app = FastAPI()
 
 
 #pets:List[Pet]=[]
-@app.post("/pet", response_model=Pet)
+'''@app.post("/pet", response_model=Pet)
 async def create_pet(pet:Pet):
     #pets.append(pet)
     return pet
-
+'''
 
 @app.get("/allpets", response_model=list[PetWithId])
 async def show_all_pets():
     pets=read_all_pets()
     return pets
+
     '''return [
         {
             "id":1,
@@ -38,12 +39,17 @@ async def show_all_pets():
     ]'''
 
 
-@app.get("/pet/{pet_id}")
+@app.get("/pet/{pet_id}", response_model=PetWithId)
 async def show_pet(pet_id:int):
     pet= read_one_pet(pet_id)
     if not pet:
         raise HTTPException(status_code=404, detail="Pet doesnt found")
     return pet
+
+##Adding a pet into the database
+@app.post("/pet", response_model=PetWithId)
+def add_pet(pet:Pet):
+    return new_pet(pet)
 
 
 @app.get("/")
