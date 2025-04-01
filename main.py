@@ -61,7 +61,7 @@ def update_pet(pet_id:int, pet_update:UpdatedPet):
         pet_id,pet_update.model_dump(exclude_unset=True),
     )
     if not modified:
-        raise HTTPException(status_code=404, detail="Pet not found")
+        raise HTTPException(status_code=404, detail="Pet not modified")
 
     return modified
 
@@ -71,7 +71,7 @@ def delete_one_pet(pet_id:int):
     removed_pet=remove_pet(pet_id)
     if not removed_pet:
         raise HTTPException(
-            status_code=404, detail="Pet not found"
+            status_code=404, detail="Pet not deleted"
         )
     return removed_pet
 
@@ -89,7 +89,9 @@ async def http_exception_handler(request,exc):
     return JSONResponse(
         status_code=exc.status_code,
         content={
-            "message":"Carambas, algo fallo"
+            "message":"Carambas, algo fallo",
+            "detail":exc.detail,
+            "path":request.url.path
         },
     )
 
