@@ -15,6 +15,7 @@ async def create_pet(pet:Pet):
     return pet
 '''
 
+#show all pets
 @app.get("/allpets", response_model=list[PetWithId])
 async def show_all_pets():
     pets=read_all_pets()
@@ -39,6 +40,7 @@ async def show_all_pets():
     ]'''
 
 
+#show one pet
 @app.get("/pet/{pet_id}", response_model=PetWithId)
 async def show_pet(pet_id:int):
     pet= read_one_pet(pet_id)
@@ -51,6 +53,8 @@ async def show_pet(pet_id:int):
 def add_pet(pet:Pet):
     return new_pet(pet)
 
+
+#modify one pet by ID
 @app.put("/pet/{pet_id}", response_model=PetWithId)
 def update_pet(pet_id:int, pet_update:UpdatedPet):
     modified=modify_pet(
@@ -60,6 +64,16 @@ def update_pet(pet_id:int, pet_update:UpdatedPet):
         raise HTTPException(status_code=404, detail="Pet not found")
 
     return modified
+
+#Delete one pet by the ID
+@app.delete("/pet/{pet_id}", response_model=Pet)
+def delete_one_pet(pet_id:int):
+    removed_pet=remove_pet(pet_id)
+    if not removed_pet:
+        raise HTTPException(
+            status_code=404, detail="Pet not found"
+        )
+    return removed_pet
 
 @app.get("/")
 async def root():
