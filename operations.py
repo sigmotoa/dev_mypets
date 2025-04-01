@@ -58,7 +58,7 @@ def new_pet(pet:Pet):
     write_pet_into_csv(pet_with_id)
     return pet_with_id
 
-
+#Edit a pet
 def modify_pet(id: int, pet: dict):
     updated_pet: Optional[PetWithId] = None
     pets = read_all_pets()
@@ -94,3 +94,27 @@ def modify_pet(id: int, pet: dict):
 
     # Return None if no pet was found
     return None
+
+
+#Delete a pet
+def remove_pet(id:int):
+    deleted_pet: Optional[Pet] = None
+    pets =read_all_pets()
+    with open(DATABASE_FILENAME, mode="w", newline="") as csvfile:
+        writer = csv.DictWriter(
+            csvfile,
+            fieldnames=column_fields,
+        )
+
+        writer.writeheader()
+        for pet in pets:
+            if pet.id == id:
+                deleted_pet=pet
+                continue
+            writer.writerow(pet.model_dump())
+    if deleted_pet:
+        dict_pet_without_id = (
+            deleted_pet.model_dump()
+        )
+        del dict_pet_without_id["id"]
+        return Pet(**dict_pet_without_id)
