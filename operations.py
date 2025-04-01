@@ -1,6 +1,8 @@
 import csv
 from typing import Optional
-from models import Pet,PetWithId
+
+
+from models import *
 
 DATABASE_FILENAME = "pets.csv"
 column_fields = ["id", "name", "breed", "birth", "kind", "female"]
@@ -55,3 +57,40 @@ def new_pet(pet:Pet):
     pet_with_id=PetWithId(id=id, **pet.model_dump())
     write_pet_into_csv(pet_with_id)
     return pet_with_id
+
+
+def modify_pet(id: int, pet: dict):
+    updated_pet: Optional[PetWithId] = None
+    pets = read_all_pets()
+
+
+    pet_found = False
+
+    # Iterate through pets to find and update the specific pet
+    for number, pet_ in enumerate(pets):
+        if pet_.id == id:
+
+            if pet.get("name") is not None:
+                pets[number].name = pet["name"]
+            if pet.get("breed") is not None:
+                pets[number].breed = pet["breed"]
+
+            updated_pet = pets[number]
+            pet_found = True
+            break  # Exit the loop once the pet is found and updated
+
+    # Only write to file if a pet was actually modified
+    if pet_found:
+        with open(DATABASE_FILENAME, mode="w", newline="") as csvfile:
+            writer = csv.DictWriter(
+                csvfile,
+                fieldnames=column_fields,
+            )
+            writer.writeheader()
+            for pet in pets:
+                writer.writerow(pet.model_dump())
+
+        return updated_pet
+
+    # Return None if no pet was found
+    return None

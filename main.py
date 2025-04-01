@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi import HTTPException
 from starlette.responses import JSONResponse
-from models import Pet,PetResponse,PetWithId
+from models import *
 from operations import *
 from typing import List
 
@@ -51,6 +51,15 @@ async def show_pet(pet_id:int):
 def add_pet(pet:Pet):
     return new_pet(pet)
 
+@app.put("/pet/{pet_id}", response_model=PetWithId)
+def update_pet(pet_id:int, pet_update:UpdatedPet):
+    modified=modify_pet(
+        pet_id,pet_update.model_dump(exclude_unset=True),
+    )
+    if not modified:
+        raise HTTPException(status_code=404, detail="Pet not found")
+
+    return modified
 
 @app.get("/")
 async def root():

@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic import BaseModel, Field
 
 class Pet(BaseModel):
@@ -17,5 +19,10 @@ class PetWithId(Pet):
 class PetResponse(BaseModel):
     name:str
     kind:str
+
+
+class UpdatedPet(BaseModel):
+    name: Optional[str] = Field(..., min_length=3, max_length=20)
+    breed:Optional[str] = Field(..., min_length=3, max_length=25)
 
 
