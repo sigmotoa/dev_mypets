@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi import HTTPException
 from fastapi.params import Depends
+from sqlalchemy import Boolean
 
 from starlette.responses import JSONResponse
 
@@ -120,7 +121,7 @@ async def raise_exception():
 
 
 @app.post("/dbpet", response_model=dict[str, int])
-async def add_pet(pet: models.Pet, db_session:Annotated[AsyncSession,Depends(get_db_session)]):
+async def add_pet_db(pet: models.Pet, db_session:Annotated[AsyncSession,Depends(get_db_session)]):
     pet_id=await db_create_pet(db_session,
                                pet.name,
                                pet.breed,
@@ -131,7 +132,7 @@ async def add_pet(pet: models.Pet, db_session:Annotated[AsyncSession,Depends(get
 
 
 @app.get("/dbpet/{pet_id}", response_model=PetWithId)
-async def one_pet(pet_id:int,db_session:Annotated[AsyncSession,Depends(get_db_session)]):
+async def one_pet_db(pet_id:int, db_session:Annotated[AsyncSession,Depends(get_db_session)]):
     pet= await db_get_pet(db_session=db_session, pet_id=pet_id)
     if pet is None:
         raise HTTPException(status_code=404, detail="No esta la mascota "+{pet_id})
@@ -139,8 +140,14 @@ async def one_pet(pet_id:int,db_session:Annotated[AsyncSession,Depends(get_db_se
 
 
 @app.get("/dballpets", response_model=list[PetWithId])
-async def all_pet(db_session:Annotated[AsyncSession,Depends(get_db_session)]):
+async def all_pet_db(db_session:Annotated[AsyncSession,Depends(get_db_session)]):
     pets = await db_get_all_pet(db_session=db_session)
     if pets is None:
         raise HTTPException(status_code=404, detail="No tenemos mascotas")
     return pets
+
+
+@app.put("/dbpet/{pet_id}")
+async def modify_name_db(pet_id:int,new_name:str,db_session:Annotated[AsyncSession, Depends(get_db_session)]):
+    pet = await db_update_pet(db_session=db_session,pet_id=pet_id,new_name=new_name)
+    return pet
