@@ -34,3 +34,13 @@ async def db_get_pet(db_session:AsyncSession, pet_id:int):
     pet = result.scalars().first()
 
     return pet
+
+
+##Retorning all pets in DB
+async def db_get_all_pet(db_session:AsyncSession):
+    query = (select(Pets))
+
+    result=await db_session.execute(query)
+    pets = result.scalars().all()
+
+    return pets

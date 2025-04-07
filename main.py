@@ -137,3 +137,10 @@ async def one_pet(pet_id:int,db_session:Annotated[AsyncSession,Depends(get_db_se
         raise HTTPException(status_code=404, detail="No esta la mascota "+{pet_id})
     return pet
 
+
+@app.get("/dballpets", response_model=list[PetWithId])
+async def all_pet(db_session:Annotated[AsyncSession,Depends(get_db_session)]):
+    pets = await db_get_all_pet(db_session=db_session)
+    if pets is None:
+        raise HTTPException(status_code=404, detail="No tenemos mascotas")
+    return pets
