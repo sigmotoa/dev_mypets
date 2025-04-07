@@ -1,3 +1,4 @@
+from sqlalchemy import update
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from database import Pets
@@ -44,3 +45,18 @@ async def db_get_all_pet(db_session:AsyncSession):
     pets = result.scalars().all()
 
     return pets
+
+
+
+#Update a pet, just the name
+async def db_update_pet(db_session:AsyncSession, pet_id:int, new_name:str):
+    query = (
+        update(Pets)
+        .where(Pets.id==pet_id)
+        .values(name=new_name)
+             )
+    result = await db_session.execute(query)
+    await db_session.commit()
+    if result.rowcount==0:
+        return False
+    return True
