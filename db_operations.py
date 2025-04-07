@@ -30,6 +30,7 @@ async def db_create_pet(
 async def db_get_pet(db_session:AsyncSession, pet_id:int):
     query = (select(Pets).where(Pets.id == pet_id))
 
-    async with db_session as session:
-        pet = await session.execute(query)
-        return pet.scalars().first()
+    result=await db_session.execute(query)
+    pet = result.scalars().first()
+
+    return pet
