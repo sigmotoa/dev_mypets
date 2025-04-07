@@ -2,7 +2,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from database import Pets
 
-async def create_pet(
+##Adding a pet in DB
+async def db_create_pet(
         db_session:AsyncSession,
         name:str,
         breed:str=None,
@@ -23,3 +24,12 @@ async def create_pet(
         pet_id = pet.id
         await db_session.commit()
     return pet_id
+
+
+##Looking for a pet in DB
+async def db_get_pet(db_session:AsyncSession, pet_id:int):
+    query = (select(Pets).where(Pets.id == pet_id))
+
+    async with db_session as session:
+        pet = await session.execute(query)
+        return pet.scalars().first()
