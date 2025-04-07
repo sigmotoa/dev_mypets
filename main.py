@@ -121,11 +121,11 @@ async def raise_exception():
 
 @app.post("/dbpet", response_model=dict[str, int])
 async def add_pet(pet: models.Pet, db_session:Annotated[AsyncSession,Depends(get_db_session)]):
-    pet_id=await create_pet(db_session,
-                            pet.name,
-                            pet.breed,
-                            pet.birth,
-                            pet.kind,
-                            pet.female,)
+    pet_id=await db_create_pet(db_session,
+                               pet.name,
+                               pet.breed,
+                               pet.birth,
+                               pet.kind,
+                               pet.female, )
     return {"Nueva mascota":pet_id}
 
