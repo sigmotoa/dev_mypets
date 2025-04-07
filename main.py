@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi import HTTPException
 from fastapi.params import Depends
-from sqlalchemy.testing.plugin.plugin_base import engines
+
 from starlette.responses import JSONResponse
 
 import models
@@ -128,4 +128,12 @@ async def add_pet(pet: models.Pet, db_session:Annotated[AsyncSession,Depends(get
                                pet.kind,
                                pet.female, )
     return {"Nueva mascota":pet_id}
+
+
+@app.get("/dbpet/{pet_id}", response_model=PetWithId)
+async def one_pet(pet_id:int,db_session:Annotated[AsyncSession,Depends(get_db_session)]):
+    pet= await db_get_pet(db_session=db_session, pet_id=pet_id)
+    if pet is None:
+        raise HTTPException(status_code=404, detail="No esta la mascota "+{pet_id})
+    return pet
 
