@@ -151,3 +151,9 @@ async def all_pet_db(db_session:Annotated[AsyncSession,Depends(get_db_session)])
 async def modify_name_db(pet_id:int,new_name:str,db_session:Annotated[AsyncSession, Depends(get_db_session)]):
     pet = await db_update_pet(db_session=db_session,pet_id=pet_id,new_name=new_name)
     return pet
+
+
+@app.delete("/dbpet/{pet_id}")
+async def delete_pet_db(pet_id:int, db_session:Annotated[AsyncSession,Depends(get_db_session)]):
+    pet = await db_remove_pet(pet_id=pet_id, db_session=db_session)
+    return pet

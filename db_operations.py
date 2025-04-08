@@ -1,4 +1,4 @@
-from sqlalchemy import update
+from sqlalchemy import update, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from database import Pets
@@ -56,6 +56,17 @@ async def db_update_pet(db_session:AsyncSession, pet_id:int, new_name:str):
         .values(name=new_name)
              )
     result = await db_session.execute(query)
+    await db_session.commit()
+    if result.rowcount==0:
+        return False
+    return True
+
+
+#Remove a Pet of the DB
+async def db_remove_pet(db_session:AsyncSession, pet_id:int):
+    result = await db_session.execute(
+        delete(Pets).where(Pets.id==pet_id)
+    )
     await db_session.commit()
     if result.rowcount==0:
         return False
