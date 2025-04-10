@@ -3,7 +3,15 @@ from fastapi import HTTPException
 from fastapi.params import Depends
 from sqlalchemy import Boolean
 
+#SQLMODEL
+from fastapi import UploadFile, File, Form, Query
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import JSONResponse
+from sqlmodel import Session
+from typing import List, Optional
+
 from starlette.responses import JSONResponse
+
 
 import models
 from models import *
@@ -16,7 +24,27 @@ from typing import Annotated
 from sqlalchemy.ext.asyncio import AsyncSession
 from db_operations import *
 
+#Importar modelos SQLMODEL
+from sqlmodel_conn import get_session, init_db
+from sqlmodel_db import Pet
+import sqlmodel_ops as crud
+from utils import terms, file_utils
 
+@asynccontextmanager
+async def lifespan(app:FastAPI):
+    init_db()
+    yield
+
+app = FastAPI(lifespan=lifespan)
+app.mount("/pet_images", StaticFiles(directory="pet_images"), name="pet_images")
+
+##Pets with IMAGE
+@app.post("/pets", response_model=Pet, tags=["SQLMODEL"])
+async def create_pet_img():
+    #TODO
+    pass
+
+''' 
 @asynccontextmanager
 async def lifespan(app:FastAPI):
     engine = get_engine()
@@ -26,13 +54,13 @@ async def lifespan(app:FastAPI):
     await engine.dispose()
 app = FastAPI(lifespan=lifespan)
 
-
+'''
 #pets:List[Pet]=[]
-'''@app.post("/pet", response_model=Pet)
+@app.post("/pet", response_model=Pet)
 async def create_pet(pet:Pet):
     #pets.append(pet)
     return pet
-'''
+
 
 #show all pets
 @app.get("/allpets", response_model=list[PetWithId])
@@ -157,3 +185,4 @@ async def modify_name_db(pet_id:int,new_name:str,db_session:Annotated[AsyncSessi
 async def delete_pet_db(pet_id:int, db_session:Annotated[AsyncSession,Depends(get_db_session)]):
     pet = await db_remove_pet(pet_id=pet_id, db_session=db_session)
     return pet
+
