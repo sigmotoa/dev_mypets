@@ -13,3 +13,8 @@ async def create_pet_sql(session: Session, pet:PetSQL):
     await session.refresh(db_pet)
 
     return db_pet
+
+
+#Get pet by the id
+async def get_pet(session:Session, pet_id:int):
+    return await session.get(PetSQL, pet_id)

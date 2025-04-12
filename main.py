@@ -30,6 +30,7 @@ from db_operations import *
 from sqlmodel_conn import get_session, init_db
 from sqlmodel_db import PetSQL
 import sqlmodel_ops as crud
+from sqlmodel_ops import get_pet
 from utils.file_utils import save_upload_file
 from utils.terms import *
 from utils import file_utils
@@ -82,6 +83,16 @@ async def create_pet_img(
             )
     return pet
 
+
+@app.get("/pets/{pet_id}", response_model=PetSQL, tags=["SQLMODEL"])
+async def read_pet_img(pet_id:int, session:Session = Depends(get_session)):
+    pet = await crud.get_pet(session=session, pet_id=pet_id)
+    if pet is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Mascota con img no encontrada"
+        )
+    return pet
 
 ''' 
 @asynccontextmanager
