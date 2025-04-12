@@ -27,7 +27,7 @@ async def save_upload_file(
         raise ValueError("Archivo no permitido")
 
     #Crear nombre para archivo
-    base_name= f"pet_{pet_id}"
+    base_name= f"pet_{pet_id}_"
 
     if pet_name:
         base_name=f"{base_name}{pet_name}"
