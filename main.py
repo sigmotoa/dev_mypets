@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from fastapi import FastAPI
 from fastapi import HTTPException
 from fastapi.params import Depends
@@ -26,23 +28,60 @@ from db_operations import *
 
 #Importar modelos SQLMODEL
 from sqlmodel_conn import get_session, init_db
-from sqlmodel_db import Pet
+from sqlmodel_db import PetSQL
 import sqlmodel_ops as crud
-from utils import terms, file_utils
+from utils.file_utils import save_upload_file
+from utils.terms import *
+from utils import file_utils
 
 @asynccontextmanager
 async def lifespan(app:FastAPI):
-    init_db()
+    await init_db()
     yield
 
 app = FastAPI(lifespan=lifespan)
 app.mount("/pet_images", StaticFiles(directory="pet_images"), name="pet_images")
 
 ##Pets with IMAGE
-@app.post("/pets", response_model=Pet, tags=["SQLMODEL"])
-async def create_pet_img():
-    #TODO
-    pass
+@app.post("/pets", response_model=PetSQL, tags=["SQLMODEL"])
+async def create_pet_img(
+        name: str = Form(...),
+    breed: Optional[str] = Form(None),
+    birth: Optional[int] = Form(None),
+    kind: Optional[Kind] = Form(None),
+    genre: Optional[Genre] = Form(None),
+    image: Optional[UploadFile] = File(None),
+    session: Session = Depends(get_session)
+):
+
+    pet_data=PetSQL(
+        name=name,
+        breed=breed,
+        birth=birth,
+        kind=kind,
+        genre=genre,
+
+    )
+    pet = await crud.create_pet_sql(session, pet_data)
+
+    if image:
+        try:
+            image_path = await save_upload_file(image, pet.id, pet.name)
+            pet.image_path = image_path
+            session.add(pet)
+            await session.commit()
+            await session.refresh(pet)
+        except ValueError as e:
+            return JSONResponse(
+                status_code=201,
+                content={
+                    "id":pet.id,
+                    "warning":str(e),
+                    **pet.dict(exclude={"id"})
+                }
+            )
+    return pet
+
 
 ''' 
 @asynccontextmanager
