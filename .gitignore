@@ -298,4 +298,3 @@ cython_debug/
 identifier.sqlite
 
 .petsdb.db
-/pet_images
