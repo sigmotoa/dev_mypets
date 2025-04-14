@@ -30,7 +30,7 @@ from db_operations import *
 from sqlmodel_conn import get_session, init_db
 from sqlmodel_db import PetSQL
 import sqlmodel_ops as crud
-from sqlmodel_ops import get_pet
+from sqlmodel_ops import get_pet, mark_pet_inactive
 from utils.file_utils import save_upload_file
 from utils.terms import *
 from utils import file_utils
@@ -115,6 +115,14 @@ async def update_pet_img(pet_id:int, pet_update:PetSQL,session:Session=Depends(g
         raise HTTPException(status_code=404, detail="Mascota no encontrada para actualizar")
     return pet
 
+
+#Deactive a pet
+@app.patch("/petsm/{pet_id}", response_model=PetSQL, tags=["SQLMODEL"])
+async def deactive_pet_img(pet_id:int, sesion:Session=Depends(get_session)):
+    pet = await crud.mark_pet_inactive(sesion, pet_id)
+    if pet is None:
+        raise HTTPException(status_code=404, detail="Mascota no encontrada para desactivar")
+    return pet
 
 
 
