@@ -31,7 +31,7 @@ from sqlmodel_conn import get_session, init_db
 from sqlmodel_db import PetSQL
 import sqlmodel_ops as crud
 from sqlmodel_ops import get_pet, mark_pet_inactive
-from utils.file_utils import save_upload_file
+from utils.file_utils import save_upload_file, upload_img_supabase
 from utils.terms import *
 from utils import file_utils
 
@@ -56,16 +56,26 @@ async def create_pet_img(
     session: Session = Depends(get_session)
 ):
 
+    image_url= await upload_img_supabase(image)
+    #print("OK", image_url)
+
     pet_data=PetSQL(
         name=name,
         breed=breed,
         birth=birth,
         kind=kind,
         genre=genre,
+        image_path=image_url
 
     )
     pet = await crud.create_pet_sql(session, pet_data)
 
+    session.add(pet)
+    #await session.commit()
+    #await session.refresh(pet)
+    return pet
+
+'''
     if image:
         try:
             image_path = await save_upload_file(image, pet.id, pet.name)
@@ -82,7 +92,9 @@ async def create_pet_img(
                     **pet.dict(exclude={"id"})
                 }
             )
-    return pet
+        return pet
+'''
+
 
 
 
