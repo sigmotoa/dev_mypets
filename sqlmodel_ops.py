@@ -52,4 +52,4 @@ async def update_pet(session:Session, pet_id:int, pet_update:Dict[str, Any]):
 
 #Modify pet status.
 async def mark_pet_inactive(session:Session, pet_id:int):
-    pass
+    return await update_pet(session, pet_id, {"is_alive":False,"updated_at":datetime.now()})
