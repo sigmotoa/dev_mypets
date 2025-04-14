@@ -28,3 +28,28 @@ async def get_all_pets(session:Session):
     pets = results.all()
     return pets
 
+#update_pet
+async def update_pet(session:Session, pet_id:int, pet_update:Dict[str, Any]):
+    pet = await session.get(PetSQL, pet_id)
+    if pet is None:
+        return None
+
+    pet_data = pet.dict()
+    for key, value in pet_update.items():
+        if value is not None:
+            pet_data[key]=value
+
+    pet_data["updated_at"] = datetime.now()
+
+    for key, value in pet_data.items():
+        setattr(pet, key, value)
+
+    session.add(pet)
+    await session.commit()
+    await session.refresh(pet)
+
+    return pet
+
+#Modify pet status.
+async def mark_pet_inactive(session:Session, pet_id:int):
+    pass
