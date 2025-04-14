@@ -298,3 +298,6 @@ cython_debug/
 identifier.sqlite
 
 .petsdb.db
+
+probe_supabase.py
+foto_sigmotoa.jpg
