@@ -94,6 +94,13 @@ async def read_pet_img(pet_id:int, session:Session = Depends(get_session)):
         )
     return pet
 
+
+@app.get("/pets", response_model=list[PetSQL], tags=["SQLMODEL"])
+async def read_pets_img(session:Session = Depends(get_session)):
+    pets = await crud.get_all_pets(session=session)
+    return pets
+
+
 ''' 
 @asynccontextmanager
 async def lifespan(app:FastAPI):
