@@ -1,6 +1,8 @@
 
-from sqlalchemy.ext.asyncio import AsyncSession,create_async_engine, AsyncEngine
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncEngine
 from sqlmodel import SQLModel
+from sqlmodel.ext.asyncio.session import AsyncSession
+
 from sqlalchemy.orm import sessionmaker
 
 DATABASE_URL= "sqlite+aiosqlite:///.petsdb.db"
