@@ -1,4 +1,5 @@
 from sqlmodel import Session, select
+from sqlmodel.ext.asyncio.session import AsyncSession
 from datetime import datetime
 from typing import List, Optional, Dict, Any
 from sqlmodel_db import PetSQL
@@ -18,3 +19,12 @@ async def create_pet_sql(session: Session, pet:PetSQL):
 #Get pet by the id
 async def get_pet(session:Session, pet_id:int):
     return await session.get(PetSQL, pet_id)
+
+
+#Get all pets of the list
+async def get_all_pets(session:Session):
+    query = select(PetSQL)
+    results = await session.exec(query)
+    pets = results.all()
+    return pets
+
