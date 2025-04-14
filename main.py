@@ -44,6 +44,7 @@ app = FastAPI(lifespan=lifespan)
 app.mount("/pet_images", StaticFiles(directory="pet_images"), name="pet_images")
 
 ##Pets with IMAGE
+#Add a pet
 @app.post("/pets", response_model=PetSQL, tags=["SQLMODEL"])
 async def create_pet_img(
         name: str = Form(...),
@@ -84,6 +85,8 @@ async def create_pet_img(
     return pet
 
 
+
+#Get one pet
 @app.get("/pets/{pet_id}", response_model=PetSQL, tags=["SQLMODEL"])
 async def read_pet_img(pet_id:int, session:Session = Depends(get_session)):
     pet = await crud.get_pet(session=session, pet_id=pet_id)
@@ -95,10 +98,25 @@ async def read_pet_img(pet_id:int, session:Session = Depends(get_session)):
     return pet
 
 
+#Get all pets
+
 @app.get("/pets", response_model=list[PetSQL], tags=["SQLMODEL"])
 async def read_pets_img(session:Session = Depends(get_session)):
     pets = await crud.get_all_pets(session=session)
     return pets
+
+
+
+#Update one pet
+@app.patch("/pets/{pet_id}", response_model=PetSQL, tags=["SQLMODEL"])
+async def update_pet_img(pet_id:int, pet_update:PetSQL,session:Session=Depends(get_session)):
+    pet = await crud.update_pet(session, pet_id, pet_update.dict(exclude_unset=True))
+    if pet is None:
+        raise HTTPException(status_code=404, detail="Mascota no encontrada para actualizar")
+    return pet
+
+
+
 
 
 ''' 
