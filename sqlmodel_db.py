@@ -10,17 +10,17 @@ from utils.terms import *
 CURRENT_YEAR=datetime.now().year
 #Creation of the basic model of the pets
 class PetBase(SQLModel):
-    name: str = Field(index=True, min_length=3, max_length=20)
-    breed:str = Field(default=None, min_length=3, max_length=30)
+    name: Optional[str] = Field(index=True, min_length=3, max_length=20)
+    breed:Optional[str] = Field(default=None, min_length=3, max_length=30)
     #Using new types to be pro 🤓
     birth: Optional[int] = Field(default=None, le=CURRENT_YEAR)
-    kind: Kind = Field(default=None)
-    genre: Genre = Field(default=None)
+    kind: Optional[Kind] = Field(default=None)
+    genre: Optional[Genre] = Field(default=None)
 
     #Adding a new fields to look cool
     image_path: Optional[str]=Field(default=None)
-    is_alive:bool = Field(default=True)
-    created_at:datetime = Field(default_factory=datetime.now)
+    is_alive:Optional[bool] = Field(default=True)
+    created_at:Optional[datetime] = Field(default_factory=datetime.now)
     updated_at:Optional[datetime] = Field(default=None)
 
 
