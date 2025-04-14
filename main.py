@@ -1,9 +1,19 @@
+from datetime import datetime
+
 from fastapi import FastAPI
 from fastapi import HTTPException
 from fastapi.params import Depends
 from sqlalchemy import Boolean
 
+#SQLMODEL
+from fastapi import UploadFile, File, Form, Query
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import JSONResponse
+from sqlmodel import Session
+from typing import List, Optional
+
 from starlette.responses import JSONResponse
+
 
 import models
 from models import *
@@ -16,7 +26,108 @@ from typing import Annotated
 from sqlalchemy.ext.asyncio import AsyncSession
 from db_operations import *
 
+#Importar modelos SQLMODEL
+from sqlmodel_conn import get_session, init_db
+from sqlmodel_db import PetSQL
+import sqlmodel_ops as crud
+from sqlmodel_ops import get_pet, mark_pet_inactive
+from utils.file_utils import save_upload_file
+from utils.terms import *
+from utils import file_utils
 
+@asynccontextmanager
+async def lifespan(app:FastAPI):
+    await init_db()
+    yield
+
+app = FastAPI(lifespan=lifespan)
+app.mount("/pet_images", StaticFiles(directory="pet_images"), name="pet_images")
+
+##Pets with IMAGE
+#Add a pet
+@app.post("/pets", response_model=PetSQL, tags=["SQLMODEL"])
+async def create_pet_img(
+        name: str = Form(...),
+    breed: Optional[str] = Form(None),
+    birth: Optional[int] = Form(None),
+    kind: Optional[Kind] = Form(None),
+    genre: Optional[Genre] = Form(None),
+    image: Optional[UploadFile] = File(None),
+    session: Session = Depends(get_session)
+):
+
+    pet_data=PetSQL(
+        name=name,
+        breed=breed,
+        birth=birth,
+        kind=kind,
+        genre=genre,
+
+    )
+    pet = await crud.create_pet_sql(session, pet_data)
+
+    if image:
+        try:
+            image_path = await save_upload_file(image, pet.id, pet.name)
+            pet.image_path = image_path
+            session.add(pet)
+            await session.commit()
+            await session.refresh(pet)
+        except ValueError as e:
+            return JSONResponse(
+                status_code=201,
+                content={
+                    "id":pet.id,
+                    "warning":str(e),
+                    **pet.dict(exclude={"id"})
+                }
+            )
+    return pet
+
+
+
+#Get one pet
+@app.get("/pets/{pet_id}", response_model=PetSQL, tags=["SQLMODEL"])
+async def read_pet_img(pet_id:int, session:Session = Depends(get_session)):
+    pet = await crud.get_pet(session=session, pet_id=pet_id)
+    if pet is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Mascota con img no encontrada"
+        )
+    return pet
+
+
+#Get all pets
+
+@app.get("/pets", response_model=list[PetSQL], tags=["SQLMODEL"])
+async def read_pets_img(session:Session = Depends(get_session)):
+    pets = await crud.get_all_pets(session=session)
+    return pets
+
+
+
+#Update one pet
+@app.patch("/pets/{pet_id}", response_model=PetSQL, tags=["SQLMODEL"])
+async def update_pet_img(pet_id:int, pet_update:PetSQL,session:Session=Depends(get_session)):
+    pet = await crud.update_pet(session, pet_id, pet_update.dict(exclude_unset=True))
+    if pet is None:
+        raise HTTPException(status_code=404, detail="Mascota no encontrada para actualizar")
+    return pet
+
+
+#Deactive a pet
+@app.patch("/petsm/{pet_id}", response_model=PetSQL, tags=["SQLMODEL"])
+async def deactive_pet_img(pet_id:int, sesion:Session=Depends(get_session)):
+    pet = await crud.mark_pet_inactive(sesion, pet_id)
+    if pet is None:
+        raise HTTPException(status_code=404, detail="Mascota no encontrada para desactivar")
+    return pet
+
+
+
+
+''' 
 @asynccontextmanager
 async def lifespan(app:FastAPI):
     engine = get_engine()
@@ -26,13 +137,13 @@ async def lifespan(app:FastAPI):
     await engine.dispose()
 app = FastAPI(lifespan=lifespan)
 
-
+'''
 #pets:List[Pet]=[]
-'''@app.post("/pet", response_model=Pet)
+@app.post("/pet", response_model=Pet)
 async def create_pet(pet:Pet):
     #pets.append(pet)
     return pet
-'''
+
 
 #show all pets
 @app.get("/allpets", response_model=list[PetWithId])
@@ -157,3 +268,4 @@ async def modify_name_db(pet_id:int,new_name:str,db_session:Annotated[AsyncSessi
 async def delete_pet_db(pet_id:int, db_session:Annotated[AsyncSession,Depends(get_db_session)]):
     pet = await db_remove_pet(pet_id=pet_id, db_session=db_session)
     return pet
+
