@@ -32,7 +32,7 @@ os.makedirs(save_path, exist_ok=True)
 # upload img to supabase
 async def upload_img_supabase(upload_file, directory="image"):
     file_ext = Path(upload_file.filename).suffix.lower()
-    file_name = f"{directory}/{upload_file.filename}"
+    file_name = f"{directory}/{uuid.uuid4().hex[:8]}_{upload_file.filename}"
 
     contents = await upload_file.read()
     res = supabase.storage.from_(SUPABASE_BUCKET).upload(file_name, contents,
