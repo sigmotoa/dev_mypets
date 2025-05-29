@@ -1,8 +1,11 @@
 from datetime import datetime
+from http.client import responses
 
+from aiohttp import request
 from fastapi import FastAPI
 from fastapi import HTTPException
 from fastapi.params import Depends
+
 from sqlalchemy import Boolean
 
 #SQLMODEL
@@ -12,8 +15,13 @@ from fastapi.responses import JSONResponse
 from sqlmodel import Session
 from typing import List, Optional
 
+from starlette.requests import Request
 from starlette.responses import JSONResponse
+from fastapi.responses import RedirectResponse
 
+#Imports for templates
+from fastapi.templating import Jinja2Templates
+from websockets.legacy.server import HTTPResponse
 
 import models
 from models import *
@@ -25,6 +33,7 @@ from db_connection import AsyncSessionLocal, get_db_session, get_engine
 from typing import Annotated
 from sqlalchemy.ext.asyncio import AsyncSession
 from db_operations import *
+from routers.pets.web import router
 
 #Importar modelos SQLMODEL
 from sqlmodel_conn import get_session, init_db
@@ -35,13 +44,29 @@ from utils.file_utils import save_upload_file, upload_img_supabase
 from utils.terms import *
 from utils import file_utils
 
+from routers.pets import web as pets
+
+
 @asynccontextmanager
 async def lifespan(app:FastAPI):
     await init_db()
     yield
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(
+    title="Pets de sigmotoa",
+    description="Mascotas de los amigos de sigmotoa",
+    version="2.0.0",
+    lifespan=lifespan)
 app.mount("/pet_images", StaticFiles(directory="pet_images"), name="pet_images")
+
+templates = Jinja2Templates(directory="templates")
+
+app.include_router(pets.router, tags=["WEB"], prefix="/web")
+
+@app.get("/")
+async def home():
+    return pets.home()
+
 
 ##Pets with IMAGE
 #Add a pet
@@ -217,9 +242,6 @@ def delete_one_pet(pet_id:int):
         )
     return removed_pet
 
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
 
 
 @app.get("/hello/{name}")
