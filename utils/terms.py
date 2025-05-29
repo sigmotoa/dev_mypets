@@ -2,10 +2,10 @@ from enum import Enum
 
 
 class Kind(Enum):
-    Dog = "Dog"
+    Dog = "Dog 🐶"
     Cat = "Cat"
     Bird = "Bird"
-    Alligator = "Alligator"
+    Alligator = "Alligator 🐊"
     Rabbit = "Rabbit"
     Hamster = "Hamster"
 
