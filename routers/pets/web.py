@@ -64,4 +64,4 @@ async def create_pet_process(
 
     session.add(pet)
 
-    return RedirectResponse("/pets", status_code=303)
+    return RedirectResponse("/web/pets", status_code=303)
