@@ -2,7 +2,7 @@
 {% block title %} Adicionar mascota {% endblock %}
 {% block content %}
 
-<form method="post" action="/web/new">
+<form method="post" enctype="multipart/form-data" action="/web/new">
     <label> Nombre</label>
     <input type="text" name="name" id="name">
     <br>
@@ -27,7 +27,7 @@
     </select>
     <br>
     <label>Foto</label>
-    <input type="file" name="image" id="image" multiple>
+    <input type="file" name="image" id="image" accept="image/*">
     <br>
 
 
