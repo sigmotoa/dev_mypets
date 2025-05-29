@@ -16,13 +16,12 @@
 
 <h5>Tipo: </h5>
 {% if pet.kind %}
-
     {% if pet.kind.value == "Dog" %} 🐶
     {% elif pet.kind.value == "Cat" %} 😻
-    {% elif pet.kind.value == "Bird" %} 😻
-    {% elif pet.kind.value == "Alligator" %} 😻
-    {% elif pet.kind.value == "Rabbit" %} 😻
-    {% elif pet.kind.value == "Hamster" %} 😻
+    {% elif pet.kind.value == "Bird" %} 🦉
+    {% elif pet.kind.value == "Alligator" %} 🐊
+    {% elif pet.kind.value == "Rabbit" %} 🐇
+    {% elif pet.kind.value == "Hamster" %} 🐁
     {% else %} 🐾
 {% endif %}
     {% else %} 🐾
