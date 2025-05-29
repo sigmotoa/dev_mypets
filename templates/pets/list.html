@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Mascotas</title>
+</head>
+<body>
+
+{% for pet in pets %}
+
+<h3>
+    {{pet.name}}
+</h3>
+
+<img width="500" height="600" src="{{pet.image_path}}">
+
+<h5>Tipo: </h5>
+{% if pet.kind %}
+
+    {% if pet.kind.value == "Dog" %} 🐶
+    {% elif pet.kind.value == "Cat" %} 😻
+    {% elif pet.kind.value == "Bird" %} 😻
+    {% elif pet.kind.value == "Alligator" %} 😻
+    {% elif pet.kind.value == "Rabbit" %} 😻
+    {% elif pet.kind.value == "Hamster" %} 😻
+    {% else %} 🐾
+{% endif %}
+    {% else %} 🐾
+{% endif %}
+
+
+
+
+
+
+
+
+{% endfor %}
+
+
+</body>
+</html>
