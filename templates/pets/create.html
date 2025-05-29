@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %} Adicionar mascota {% endblock %}
+{% block content %}
+
+<form method="post" action="/web/new">
+    <label> Nombre</label>
+    <input type="text" name="name" id="name">
+    <br>
+    <label> Raza</label>
+    <input type="text" name="breed" id="breed">
+    <br>
+    <label> Nacimiento</label>
+    <input type="number" name="birth" id="birth">
+    <br>
+    <label> Tipo</label>
+    <select name="kind" id="kind">
+        {% for kind in kinds %}
+        <option value="{{ kind }}">{{ kind }}</option>
+        {% endfor %}
+    </select>
+    <br>
+    <label> Genero</label>
+    <select name="genre" id="genre">
+        {% for genre in genres %}
+        <option value="{{ genre }}">{{ genre }}</option>
+        {% endfor %}
+    </select>
+    <br>
+    <label>Foto</label>
+    <input type="file" name="image" id="image" multiple>
+    <br>
+
+
+    <br>
+
+<button type="submit">Registrar mascota</button>
+
+</form>
+
+
+{% endblock %}
