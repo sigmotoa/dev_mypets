@@ -22,6 +22,8 @@ httpx==0.28.1
 hyperframe==6.1.0
 idna==3.10
 iniconfig==2.1.0
+Jinja2==3.1.6
+MarkupSafe==3.0.2
 multidict==6.4.3
 packaging==24.2
 pillow==11.1.0
