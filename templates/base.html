@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title%} Pets by sigmotoa {% endblock %}</title>
+</head>
+<body>
+{% include 'includes/navbar.html' %}
+
+<main>
+    {% block content %}{% endblock %}
+</main>
+
+{% include 'include/footer.html' %}
+</body>
+</html>
