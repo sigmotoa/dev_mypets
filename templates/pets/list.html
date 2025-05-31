@@ -1,11 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Lista de Mascotas</title>
-</head>
-<body>
-
+{% extends "base.html" %}
+{% block content %}
 {% for pet in pets %}
 
 <h3>
@@ -37,5 +31,4 @@
 {% endfor %}
 
 
-</body>
-</html>
+{% endblock %}
