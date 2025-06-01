@@ -15,5 +15,22 @@
 </main>
 
 {% include 'includes/footer.html' %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Obtener todos los "navbar-burger"
+    const burgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+
+    // Activar el toggle
+    burgers.forEach(burger => {
+      burger.addEventListener('click', () => {
+        const target = burger.dataset.target;
+        const targetElement = document.getElementById(target);
+
+        burger.classList.toggle('is-active');
+        targetElement.classList.toggle('is-active');
+      });
+    });
+  });
+</script>
 </body>
 </html>
