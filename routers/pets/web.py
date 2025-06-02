@@ -65,3 +65,14 @@ async def create_pet_process(
     session.add(pet)
 
     return RedirectResponse("/web/pets", status_code=303)
+
+
+@router.get("/pet/{pet_id}", response_class=HTMLResponse)
+async def one_pet(request: Request, pet_id:int, session:Session=Depends(get_session)):
+    pet = await crud.get_pet(session=session, pet_id=pet_id)
+    if pet is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Mascota no encontrada"
+        )
+    return templates.TemplateResponse("pet.html",{"request":request, "pet":pet})
