@@ -75,4 +75,5 @@ async def one_pet(request: Request, pet_id:int, session:Session=Depends(get_sess
             status_code=404,
             detail="Mascota no encontrada"
         )
-    return templates.TemplateResponse("pet.html",{"request":request, "pet":pet})
+    return templates.TemplateResponse("pets/pet.html",{"request":request, "pet":pet})
+
