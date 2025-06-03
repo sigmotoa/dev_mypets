@@ -3,39 +3,90 @@
 {% block content %}
 
 <form method="post" enctype="multipart/form-data" action="/web/new">
-    <label> Nombre</label>
-    <input type="text" name="name" id="name">
+
+
+    <div class="field">
+        <label class="label"> Nombre</label>
+        <div class="control has-icons-left has-icons-right">
+            <input class="input" type="text" name="name" id="name">
+            <span class="icon is-small is-left">
+                <i class="mdi mdi-dog"></i>
+            </span>
+        </div>
+        <p class="help">Your friend is welcome</p>
+    </div>
+
+
+    <div class="field">
+
+        <label class="label"> Raza</label>
+        <div class="control has-icons-left has-icons-right">
+            <input type="text" name="breed" id="breed" class="input">
+            <span class="icon is-small is-left">
+                <i class="mdi mdi-all-inclusive"></i>
+            </span>
+        </div>
+        <p class="help">All breeds are allowed</p>
+    </div>
+
+    <div class="field">
+
+        <label class="label"> Nacimiento</label>
+        <div class="control has-icons-left has-icons-right">
+            <input type="number" name="birth" id="birth" class="input">
+            <span class="icon is-small is-left">
+                <i class="mdi mdi-calendar-range"></i>
+            </span>
+        </div>
+        <p class="help">What year your friend has born?</p>
+    </div>
+
     <br>
-    <label> Raza</label>
-    <input type="text" name="breed" id="breed">
+
+    <div class="control has-icons-left">
+        <div class="select">
+
+            <select name="kind" id="kind">
+                <option selected>Kind</option>
+                {% for kind in kinds %}
+                <option value="{{ kind }}">{{ kind }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="icon is-small is-left">
+            <i class="mdi mdi-paw"></i>
+        </div>
+    </div>
     <br>
-    <label> Nacimiento</label>
-    <input type="number" name="birth" id="birth">
-    <br>
-    <label> Tipo</label>
-    <select name="kind" id="kind">
-        {% for kind in kinds %}
-        <option value="{{ kind }}">{{ kind }}</option>
-        {% endfor %}
-    </select>
-    <br>
-    <label> Genero</label>
-    <select name="genre" id="genre">
-        {% for genre in genres %}
-        <option value="{{ genre }}">{{ genre }}</option>
-        {% endfor %}
-    </select>
-    <br>
+
+
+    <div class="control has-icons-left">
+        <div class="select">
+
+            <select name="genre" id="genre">
+                <option selected>Genre</option>
+                {% for genre in genres %}
+                <option value="{{ genre }}">{{ genre }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="icon is-small is-left">
+            <i class="mdi mdi-human-male-female"></i>
+        </div>
+    </div>
     <label>Foto</label>
     <input type="file" name="image" id="image" accept="image/*">
     <br>
 
 
     <br>
-
-<button type="submit">Registrar mascota</button>
-
+<div class="field is-grouped">
+    <div class="control">
+    <button class="button is-link" type="submit">Registrar mascota</button>
+    </div>
+</div>
 </form>
 
 
 {% endblock %}
+
