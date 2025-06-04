@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h3>{{pet.name}}</h3>
+
+<img width="400" height="600" src="{{pet.image_path}}">
+
+<h5>Kind: </h5>
+{% if pet.kind %}
+    {% if pet.kind.value == "Dog" %} 🐶
+    {% elif pet.kind.value == "Cat" %} 😻
+    {% elif pet.kind.value == "Bird" %} 🦉
+    {% elif pet.kind.value == "Alligator" %} 🐊
+    {% elif pet.kind.value == "Rabbit" %} 🐇
+    {% elif pet.kind.value == "Hamster" %} 🐁
+    {% else %} 🐾
+{% endif %}
+    {% else %} 🐾
+{% endif %}
+
+<h5>Born: {{pet.birth}}</h5>
+
+
+
+{% endblock %}

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
+
+    <title>{% block title%} Pets by sigmotoa {% endblock %}</title>
+</head>
+<body>
+{% include 'includes/navbar.html' %}
+
+<main>
+    {% block content %}{% endblock %}
+</main>
+
+{% include 'includes/footer.html' %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Obtener todos los "navbar-burger"
+    const burgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+
+    // Activar el toggle
+    burgers.forEach(burger => {
+      burger.addEventListener('click', () => {
+        const target = burger.dataset.target;
+        const targetElement = document.getElementById(target);
+
+        burger.classList.toggle('is-active');
+        targetElement.classList.toggle('is-active');
+      });
+    });
+  });
+</script>
+</body>
+</html>
