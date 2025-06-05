@@ -340,8 +340,8 @@ Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) par
 ---
 ## 🌐 Para ver el despliege puedes ir a los siguientes enlaces
 
-- Grupo 7-9: [grupo 7-9](https://dev-mypets.onrender.com)
-- Grupo 9-11: [grupo 9-11](https://dev-mypets9-11.onrender.com)
+- Grupo 7-9: [grupo 7-9](https://dev-mypets.onrender.com/web/pets)
+- Grupo 9-11: [grupo 9-11](https://dev-mypets9-11.onrender.com/web/pets)
 
 - Debes tener paciencia mientras el server despierta.
 
