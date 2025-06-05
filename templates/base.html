@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
+    <link rel="icon" type="image/svg+xml" href="https://zglfsrorntifwejtpmjq.supabase.co/storage/v1/object/public/pet.images/image/favicon.svg">
+
+
 
     <title>{% block title%} Pets by sigmotoa {% endblock %}</title>
 </head>
@@ -12,26 +15,44 @@
 {% include 'includes/navbar.html' %}
 
 <main>
-    {% block content %}{% endblock %}
+    <div class="content">
+        {% block content %} {% endblock %}
+    </div>
 </main>
 
 {% include 'includes/footer.html' %}
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    // Obtener todos los "navbar-burger"
-    const burgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+    document.addEventListener('DOMContentLoaded', () => {
+        const burgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
 
-    // Activar el toggle
-    burgers.forEach(burger => {
-      burger.addEventListener('click', () => {
-        const target = burger.dataset.target;
-        const targetElement = document.getElementById(target);
+        // Activar el toggle
+        burgers.forEach(burger => {
+            burger.addEventListener('click', () => {
+                const target = burger.dataset.target;
+                const targetElement = document.getElementById(target);
 
-        burger.classList.toggle('is-active');
-        targetElement.classList.toggle('is-active');
-      });
+                burger.classList.toggle('is-active');
+                targetElement.classList.toggle('is-active');
+            });
+        });
     });
-  });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const fileInput = document.getElementById('image');
+        const fileName = document.getElementById('file-name');
+
+        if (fileInput && fileName) {
+            fileInput.addEventListener('change', () => {
+                if (fileInput.files.length > 0) {
+                    fileName.textContent = fileInput.files[0].name;
+                } else {
+                    fileName.textContent = 'No file selected';
+                }
+            });
+        }
+    });
 </script>
 </body>
 </html>
