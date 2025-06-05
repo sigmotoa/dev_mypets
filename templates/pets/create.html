@@ -2,90 +2,129 @@
 {% block title %} Adicionar mascota {% endblock %}
 {% block content %}
 
-<form method="post" enctype="multipart/form-data" action="/web/new">
+<div class="container">
+    <div class="box" style="max-width: 800px; margin: 2rem auto;">
+        <h1 class="title is-3 has-text-centered mb-5">Registrar Nueva Mascota</h1>
+
+        <form method="post" enctype="multipart/form-data" action="/web/new">
 
 
-    <div class="field">
-        <label class="label"> Nombre</label>
-        <div class="control has-icons-left has-icons-right">
-            <input class="input" type="text" name="name" id="name">
-            <span class="icon is-small is-left">
+            <div class="field">
+                <label class="label"> Nombre</label>
+                <div class="control has-icons-left has-icons-right">
+                    <input class="input" type="text" name="name" id="name">
+                    <span class="icon is-small is-left">
                 <i class="mdi mdi-dog"></i>
             </span>
-        </div>
-        <p class="help">Your friend is welcome</p>
-    </div>
+                </div>
+                <p class="help">Your friend is welcome</p>
+            </div>
 
 
-    <div class="field">
+            <div class="field">
 
-        <label class="label"> Raza</label>
-        <div class="control has-icons-left has-icons-right">
-            <input type="text" name="breed" id="breed" class="input">
-            <span class="icon is-small is-left">
+                <label class="label"> Raza</label>
+                <div class="control has-icons-left has-icons-right">
+                    <input type="text" name="breed" id="breed" class="input">
+                    <span class="icon is-small is-left">
                 <i class="mdi mdi-all-inclusive"></i>
             </span>
-        </div>
-        <p class="help">All breeds are allowed</p>
-    </div>
+                </div>
+                <p class="help">All breeds are allowed</p>
+            </div>
 
-    <div class="field">
+            <div class="field">
 
-        <label class="label"> Nacimiento</label>
-        <div class="control has-icons-left has-icons-right">
-            <input type="number" name="birth" id="birth" class="input">
-            <span class="icon is-small is-left">
+                <label class="label"> Nacimiento</label>
+                <div class="control has-icons-left has-icons-right">
+                    <input type="number" name="birth" id="birth" class="input">
+                    <span class="icon is-small is-left">
                 <i class="mdi mdi-calendar-range"></i>
             </span>
-        </div>
-        <p class="help">What year your friend has born?</p>
-    </div>
+                </div>
+                <p class="help">What year your friend has born?</p>
+            </div>
 
-    <br>
+            <br>
+               <div class="columns is-multiline is-variable is-4">
 
-    <div class="control has-icons-left">
-        <div class="select">
+                <!-- Selector Kind -->
+                <div class="column is-half-tablet is-full-mobile">
+                    <div class="field">
+                        <label class="label">Tipo</label>
+                        <div class="control has-icons-left">
+                            <div class="select is-fullwidth">
+                                <select name="kind" id="kind" required>
+                                    <option value="">Selecciona el tipo</option>
+                                    {% for kind in kinds %}
+                                    <option value="{{ kind }}">{{ kind }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="icon is-small is-left">
+                                <i class="mdi mdi-paw"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-            <select name="kind" id="kind">
-                <option selected>Kind</option>
-                {% for kind in kinds %}
-                <option value="{{ kind }}">{{ kind }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div class="icon is-small is-left">
-            <i class="mdi mdi-paw"></i>
-        </div>
-    </div>
-    <br>
+                <!-- Selector Genre -->
+                <div class="column is-half-tablet is-full-mobile">
+                    <div class="field">
+                        <label class="label">Género</label>
+                        <div class="control has-icons-left">
+                            <div class="select is-fullwidth">
+                                <select name="genre" id="genre" required>
+                                    <option value="">Selecciona el género</option>
+                                    {% for genre in genres %}
+                                    <option value="{{ genre }}">{{ genre }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="icon is-small is-left">
+                                <i class="mdi mdi-human-male-female"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
+                <!-- Upload de imagen -->
+                <div class="column is-full">
+                    <div class="field">
+                        <label class="label">Foto de la Mascota</label>
+                        <div class="file has-name is-boxed is-fullwidth">
+                            <label class="file-label">
+                                <input class="file-input" type="file" name="image" id="image" accept="image/*" required/>
+                                <span class="file-cta">
+                                    <span class="file-icon">
+                                        <i class="fas fa-upload"></i>
+                                    </span>
+                                    <span class="file-label">Selecciona una foto...</span>
+                                </span>
+                                <span class="file-name" id="file-name">No hay archivo seleccionado</span>
+                            </label>
+                        </div>
+                        <p class="help">Sube una foto clara de tu mascota</p>
+                    </div>
+                </div>
+            </div>
 
-    <div class="control has-icons-left">
-        <div class="select">
+            <br>
+            <div class="field is-grouped">
+                <div class="control">
+                    <button class="button is-link is-large is-fullwidth" type="submit">
+                         <span class="icon">
+                            <i class="mdi mdi-content-save"></i>
+                        </span>
+                        <span>Registrar mascota</span>
 
-            <select name="genre" id="genre">
-                <option selected>Genre</option>
-                {% for genre in genres %}
-                <option value="{{ genre }}">{{ genre }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div class="icon is-small is-left">
-            <i class="mdi mdi-human-male-female"></i>
-        </div>
-    </div>
-    <label>Foto</label>
-    <input type="file" name="image" id="image" accept="image/*">
-    <br>
+                    </button>
+                </div>
+            </div>
+        </form>
 
-
-    <br>
-<div class="field is-grouped">
-    <div class="control">
-    <button class="button is-link" type="submit">Registrar mascota</button>
     </div>
 </div>
-</form>
 
 
 {% endblock %}
