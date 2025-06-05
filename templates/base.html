@@ -12,15 +12,17 @@
     <title>{% block title%} Pets by sigmotoa {% endblock %}</title>
 </head>
 <body>
+ <div class="content">
 {% include 'includes/navbar.html' %}
 
 <main>
-    <div class="content">
+
         {% block content %} {% endblock %}
-    </div>
+
 </main>
 
 {% include 'includes/footer.html' %}
+     </div>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const burgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
