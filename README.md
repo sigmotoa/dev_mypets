@@ -206,8 +206,8 @@ SUPABASE_BUCKET = os.getenv("SUPABASE_BUCKET")
 
 1. **Clonar el repositorio**
 ```bash
-git clone https://github.com/sigmotoa/pets-de-sigmotoa.git
-cd pets-de-sigmotoa
+git clone https://github.com/sigmotoa/dev_mypets
+cd dev_mypets
 ```
 
 2. **Crear entorno virtual**
