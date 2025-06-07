@@ -1,0 +1,343 @@
+
+{% set view_type = view_type or 'card' %}
+{% set show_actions = show_actions if show_actions is not none else true %}
+{% set show_full_image = show_full_image or false %}
+
+<div class="pet-container {% if view_type == 'detail' %}pet-detail{% elif view_type == 'list' %}pet-list-item{% else %}pet-card{% endif %}">
+
+  {% if view_type == 'detail' %}
+
+    <div class="card is-large">
+      <div class="card-content">
+        <div class="columns">
+          <div class="column {% if pet.image_path %}is-two-thirds{% else %}is-full{% endif %}">
+
+
+            <div class="level is-mobile mb-4">
+              <div class="level-left">
+                <div class="level-item">
+                  <div>
+                    <h1 class="title is-2 mb-2">
+                      {{ pet.name }}
+                      {% if pet.kind %}
+                        <span class="tag is-large is-primary ml-2">
+                          {% if pet.kind.value == 'Dog' %}🐶
+                          {% elif pet.kind.value == 'Cat' %}😻
+                          {% elif pet.kind.value == 'Bird' %}🦉
+                          {% elif pet.kind.value == 'Alligator' %}🐊
+                          {% elif pet.kind.value == 'Rabbit' %}🐇
+                          {% elif pet.kind.value == 'Hamster' %}🐁
+                          {% endif %}
+                          {{ pet.kind.value }}
+                        </span>
+                      {% endif %}
+                    </h1>
+                    <div class="tags">
+                      <span class="tag {% if pet.is_alive %}is-success{% else %}is-danger{% endif %} is-medium">
+                        <span class="icon">
+                          <i class="mdi {% if pet.is_alive %}mdi-heart{% else %}mdi-heart-broken{% endif %}"></i>
+                        </span>
+                        <span>{% if pet.is_alive %}Vivo{% else %}Fallecido{% endif %}</span>
+                      </span>
+                      {% if pet.genre %}
+                        <span class="tag is-info is-medium">
+                          <span class="icon">
+                            <i class="mdi {% if pet.genre.value == 'Male' %}mdi-gender-male{% else %}mdi-gender-female{% endif %}"></i>
+                          </span>
+                          <span>{{ pet.genre.value }}</span>
+                        </span>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- dettalles -->
+            <div class="content">
+              <div class="columns is-multiline">
+                {% if pet.breed %}
+                <div class="column is-half">
+                  <div class="field">
+                    <label class="label">Raza</label>
+                    <div class="content">
+                      <span class="tag is-light is-large">{{ pet.breed }}</span>
+                    </div>
+                  </div>
+                </div>
+                {% endif %}
+
+                {% if pet.birth %}
+                <div class="column is-half">
+                  <div class="field">
+                    <label class="label">Año de Nacimiento</label>
+                    <div class="content">
+                      <span class="tag is-light is-large">
+                        <span class="icon"><i class="mdi mdi-calendar"></i></span>
+                        <span>{{ pet.birth }} ({{ now().year - pet.birth }} años)</span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                {% endif %}
+
+                {% if pet.created_at %}
+                <div class="column is-half">
+                  <div class="field">
+                    <label class="label">Registrado</label>
+                    <div class="content">
+                      <span class="tag is-light">
+                        <span class="icon"><i class="mdi mdi-clock"></i></span>
+                        <span>{{ pet.created_at.strftime('%d/%m/%Y') }}</span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                {% endif %}
+
+                <div class="column is-half">
+                  <div class="field">
+                    <label class="label">ID</label>
+                    <div class="content">
+                      <span class="tag is-light">
+                        <span class="icon"><i class="mdi mdi-identifier"></i></span>
+                        <span>#{{ pet.id }}</span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          {% if pet.image_path %}
+          <div class="column is-one-third">
+            <figure class="image">
+              <img src="{{ pet.image_path }}" alt="{{ pet.name }}" class="is-rounded pet-detail-image">
+            </figure>
+          </div>
+          {% endif %}
+        </div>
+
+
+        {% if show_actions %}
+        <div class="field is-grouped is-grouped-centered mt-5">
+          <p class="control">
+            <a href="/web/pets/{{ pet.id }}/edit" class="button is-warning">
+              <span class="icon"><i class="mdi mdi-pencil"></i></span>
+              <span>Editar</span>
+            </a>
+          </p>
+          <p class="control">
+            <button class="button is-danger" onclick="confirmDelete({{ pet.id }})">
+              <span class="icon"><i class="mdi mdi-delete"></i></span>
+              <span>{% if pet.is_alive %}Marcar como fallecido{% else %}Eliminar{% endif %}</span>
+            </button>
+          </p>
+          <p class="control">
+            <a href="/web/pets" class="button is-light">
+              <span class="icon"><i class="mdi mdi-arrow-left"></i></span>
+              <span>Volver</span>
+            </a>
+          </p>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+  {% elif view_type == 'list' %}
+
+    <div class="box pet-list-item">
+      <div class="columns is-vcentered is-mobile">
+
+
+        <div class="column is-narrow">
+          {% if pet.image_path %}
+            <figure class="image is-64x64">
+              <img src="{{ pet.image_path }}" alt="{{ pet.name }}" class="is-rounded">
+            </figure>
+          {% else %}
+            <div class="image is-64x64 has-background-light is-flex is-align-items-center is-justify-content-center" style="border-radius: 50%;">
+              <span class="icon is-large has-text-grey-light">
+                {% if pet.kind %}
+                  {% if pet.kind.value == 'Dog' %}🐶
+                  {% elif pet.kind.value == 'Cat' %}😻
+                  {% elif pet.kind.value == 'Bird' %}🦉
+                  {% elif pet.kind.value == 'Alligator' %}🐊
+                  {% elif pet.kind.value == 'Rabbit' %}🐇
+                  {% elif pet.kind.value == 'Hamster' %}🐁
+                  {% else %}<i class="mdi mdi-paw mdi-36px"></i>
+                  {% endif %}
+                {% else %}
+                  <i class="mdi mdi-paw mdi-36px"></i>
+                {% endif %}
+              </span>
+            </div>
+          {% endif %}
+        </div>
+
+
+        <div class="column">
+          <div class="content">
+            <div class="level is-mobile">
+              <div class="level-left">
+                <div class="level-item">
+                  <div>
+                    <h5 class="title is-5 mb-1">
+                      <a href="/web/pets/{{ pet.id }}" class="has-text-dark">{{ pet.name }}</a>
+                    </h5>
+                    <div class="tags">
+                      {% if pet.kind %}
+                        <span class="tag is-small is-primary">{{ pet.kind.value }}</span>
+                      {% endif %}
+                      {% if pet.breed %}
+                        <span class="tag is-small is-light">{{ pet.breed }}</span>
+                      {% endif %}
+                      {% if pet.birth %}
+                        <span class="tag is-small is-light">{{ 2024 - pet.birth }} años</span>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="level-right">
+                <div class="level-item">
+                  <div class="tags">
+                    <span class="tag is-small {% if pet.is_alive %}is-success{% else %}is-danger{% endif %}">
+                      {% if pet.is_alive %}
+                        <i class="mdi mdi-heart"></i>
+                      {% else %}
+                        <i class="mdi mdi-heart-broken"></i>
+                      {% endif %}
+                    </span>
+                    {% if pet.genre %}
+                      <span class="tag is-small is-info">
+                        <i class="mdi {% if pet.genre.value == 'Male' %}mdi-gender-male{% else %}mdi-gender-female{% endif %}"></i>
+                      </span>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        {% if show_actions %}
+        <div class="column is-narrow">
+          <div class="field is-grouped">
+            <p class="control">
+              <a href="/web/pets/{{ pet.id }}" class="button is-small is-primary is-outlined" title="Ver detalles">
+                <span class="icon is-small"><i class="mdi mdi-eye"></i></span>
+              </a>
+            </p>
+            <p class="control">
+              <a href="/web/pets/{{ pet.id }}/edit" class="button is-small is-warning is-outlined" title="Editar">
+                <span class="icon is-small"><i class="mdi mdi-pencil"></i></span>
+              </a>
+            </p>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+  {% else %}
+
+    <div class="card pet-card">
+      {% if pet.image_path %}
+      <div class="card-image">
+        <figure class="image is-4by3">
+          <img src="{{ pet.image_path }}" alt="{{ pet.name }}">
+        </figure>
+      </div>
+      {% endif %}
+
+      <div class="card-content">
+        <div class="media">
+          <div class="media-left">
+            {% if not pet.image_path %}
+            <figure class="image is-48x48">
+              <div class="is-flex is-align-items-center is-justify-content-center has-background-light" style="width: 48px; height: 48px; border-radius: 50%;">
+                {% if pet.kind %}
+                  {% if pet.kind.value == 'Dog' %}🐶
+                  {% elif pet.kind.value == 'Cat' %}😻
+                  {% elif pet.kind.value == 'Bird' %}🦉
+                  {% elif pet.kind.value == 'Alligator' %}🐊
+                  {% elif pet.kind.value == 'Rabbit' %}🐇
+                  {% elif pet.kind.value == 'Hamster' %}🐁
+                  {% endif %}
+                {% else %}
+                  <i class="mdi mdi-paw"></i>
+                {% endif %}
+              </div>
+            </figure>
+            {% endif %}
+          </div>
+          <div class="media-content">
+            <p class="title is-4">{{ pet.name }}</p>
+            <div class="tags">
+              {% if pet.kind %}
+                <span class="tag is-primary">{{ pet.kind.value }}</span>
+              {% endif %}
+              {% if pet.breed %}
+                <span class="tag is-light">{{ pet.breed }}</span>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+
+        <div class="content">
+          <div class="level is-mobile">
+            <div class="level-left">
+              <div class="level-item has-text-centered">
+                <div>
+                  <p class="heading">Estado</p>
+                  <p class="title is-6">
+                    <span class="tag {% if pet.is_alive %}is-success{% else %}is-danger{% endif %}">
+                      {% if pet.is_alive %}Vivo{% else %}Fallecido{% endif %}
+                    </span>
+                  </p>
+                </div>
+              </div>
+              {% if pet.birth %}
+              <div class="level-item has-text-centered">
+                <div>
+                  <p class="heading">Edad</p>
+                  <p class="title is-6">{{ 2024 - pet.birth }} años</p>
+                </div>
+              </div>
+              {% endif %}
+              {% if pet.genre %}
+              <div class="level-item has-text-centered">
+                <div>
+                  <p class="heading">Género</p>
+                  <p class="title is-6">
+                    <span class="icon">
+                      <i class="mdi {% if pet.genre.value == 'Male' %}mdi-gender-male has-text-info{% else %}mdi-gender-female has-text-danger{% endif %}"></i>
+                    </span>
+                  </p>
+                </div>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {% if show_actions %}
+      <footer class="card-footer">
+        <a href="/web/pets/{{ pet.id }}" class="card-footer-item">
+          <span class="icon"><i class="mdi mdi-eye"></i></span>
+          <span>Ver</span>
+        </a>
+        <a href="/web/pets/{{ pet.id }}/edit" class="card-footer-item">
+          <span class="icon"><i class="mdi mdi-pencil"></i></span>
+          <span>Editar</span>
+        </a>
+      </footer>
+      {% endif %}
+    </div>
+  {% endif %}
+</div>
