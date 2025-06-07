@@ -154,11 +154,11 @@
 
         <div class="column is-narrow">
           {% if pet.image_path %}
-            <figure class="image is-64x64">
-              <img src="{{ pet.image_path }}" alt="{{ pet.name }}" class="is-rounded">
+            <figure class="image is-128x128" style="margin: auto; border-radius: 10px;overflow: hidden;" >
+              <img src="{{ pet.image_path }}" alt="{{ pet.name }}" class="image is-3by4">
             </figure>
           {% else %}
-            <div class="image is-64x64 has-background-light is-flex is-align-items-center is-justify-content-center" style="border-radius: 50%;">
+            <div class="image is-64x64 has-background-light is-flex is-align-items-center is-justify-content-center" style="border-radius: 40%;">
               <span class="icon is-large has-text-grey-light">
                 {% if pet.kind %}
                   {% if pet.kind.value == 'Dog' %}🐶
