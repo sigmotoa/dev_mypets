@@ -26,7 +26,7 @@ async def home(request: Request):
 async def pets_list(request: Request, session: Session = Depends(get_session)):
     pets = await crud.get_all_pets(session=session)
     return templates.TemplateResponse("pets/list.html",
-                                      {"request": request, "pets": pets})
+                                      {"request": request, "pets": pets, "view_type":"list", "show_actions":False, "show_full_image":False})
 
 
 @router.get("/new", response_class=HTMLResponse)
