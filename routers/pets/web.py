@@ -67,7 +67,7 @@ async def create_pet_process(
     return RedirectResponse("/web/pets", status_code=303)
 
 
-@router.get("/pet/{pet_id}", response_class=HTMLResponse)
+@router.get("/pets/{pet_id}", response_class=HTMLResponse)
 async def one_pet(request: Request, pet_id:int, session:Session=Depends(get_session)):
     pet = await crud.get_pet(session=session, pet_id=pet_id)
     if pet is None:
@@ -75,5 +75,6 @@ async def one_pet(request: Request, pet_id:int, session:Session=Depends(get_sess
             status_code=404,
             detail="Mascota no encontrada"
         )
-    return templates.TemplateResponse("pets/pet.html",{"request":request, "pet":pet})
+    #"request": request, "pets": pets, "view_type":"list", "show_actions":False, "show_full_image":False
+    return templates.TemplateResponse("pets/pet.html",{"request":request, "pet":pet, "view_type":"detail", "show_actions":True, "show_full_image":True})
 
