@@ -21,33 +21,34 @@ async def home(request: Request):
     return templates.TemplateResponse("pets/home.html", {"request": request})
 
 
-#All pets
+# All pets
 @router.get("/pets", response_class=HTMLResponse)
 async def pets_list(request: Request, session: Session = Depends(get_session)):
     pets = await crud.get_all_pets(session=session)
     return templates.TemplateResponse("pets/list.html",
-                                      {"request": request, "pets": pets, "view_type":"list", "show_actions":False, "show_full_image":False})
+                                      {"request": request, "pets": pets, "view_type": "list", "show_actions": False,
+                                       "show_full_image": False})
 
 
 @router.get("/new", response_class=HTMLResponse)
-async def create_pet(request:Request):
+async def create_pet(request: Request):
     return templates.TemplateResponse("pets/create.html", {
-        "request":request,
-        "kinds":[kind.value for kind in Kind],
-        "genres":[genre.value for genre in Genre]
+        "request": request,
+        "kinds": [kind.value for kind in Kind],
+        "genres": [genre.value for genre in Genre]
     })
 
 
 @router.post("/new", response_class=HTMLResponse)
 async def create_pet_process(
-        request:Request,
-        name:str = Form(...),
-        breed: Optional[str]=Form(None),
-        birth:Optional[int]=Form(None),
-        kind:Optional[Kind]=Form(None),
-        genre:Optional[Genre]=Form(None),
-        image:Optional[UploadFile]=File(None),
-        session:Session=Depends(get_session)
+        request: Request,
+        name: str = Form(...),
+        breed: Optional[str] = Form(None),
+        birth: Optional[int] = Form(None),
+        kind: Optional[Kind] = Form(None),
+        genre: Optional[Genre] = Form(None),
+        image: Optional[UploadFile] = File(None),
+        session: Session = Depends(get_session)
 ):
     image_url = await upload_img_supabase(image)
 
@@ -67,14 +68,23 @@ async def create_pet_process(
     return RedirectResponse("/web/pets", status_code=303)
 
 
+@router.get("/pets/search")
+async def search_pet(q: str):
+    id = int(q)
+    return RedirectResponse(f"/web/pets/{id}", status_code=303)
+
 @router.get("/pets/{pet_id}", response_class=HTMLResponse)
-async def one_pet(request: Request, pet_id:int, session:Session=Depends(get_session)):
+async def one_pet(request: Request, pet_id: int, session: Session = Depends(get_session)):
     pet = await crud.get_pet(session=session, pet_id=pet_id)
     if pet is None:
         raise HTTPException(
             status_code=404,
             detail="Mascota no encontrada"
         )
-    #"request": request, "pets": pets, "view_type":"list", "show_actions":False, "show_full_image":False
-    return templates.TemplateResponse("pets/pet.html",{"request":request, "pet":pet, "view_type":"detail", "show_actions":True, "show_full_image":True})
+    # "request": request, "pets": pets, "view_type":"list", "show_actions":False, "show_full_image":False
+    return templates.TemplateResponse("pets/pet.html",
+                                      {"request": request, "pet": pet, "view_type": "detail", "show_actions": False,
+                                       "show_full_image": True})
+
+
 
