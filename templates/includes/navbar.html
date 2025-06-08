@@ -29,31 +29,44 @@
 
         <div class="navbar-end">
             <div class="navbar-item">
-        <div class="buttons">
-          <a class="button is-primary" href="/web/new">
-            <strong>Add a Friend</strong>
-          </a>
-
-        </div>
-            <div class="navbar-item">
-                <div class="navbar-item has-dropdown is-hoverable is-right">
-                    <a class="navbar-link">
-                        More
+                <div class="buttons">
+                    <a class="button is-primary" href="/web/new">
+                        <strong>Add a Friend</strong>
                     </a>
-                    <div class="navbar-dropdown" style="position: absolute; z-index: 999;">
-                        <a class="navbar-item">
-                            About
+
+                </div>
+                <div class="navbar-item">
+                    <div class="navbar-item has-dropdown is-hoverable is-right">
+                        <a class="navbar-link">
+                            More
                         </a>
-                        <a class="navbar-item">
-                            Contact
-                        </a>
-                        <hr class="navbar-divider">
-                        <a class="navbar-item">
-                            Report an issue
-                        </a>
-                    </div>
+                        <div class="navbar-dropdown" style="position: absolute; z-index: 999;">
+                            <a class="navbar-item">
+                                About
+                            </a>
+                            <a class="navbar-item">
+                                Contact
+                            </a>
+                            <hr class="navbar-divider">
+                            <a class="navbar-item">
+                                Report an issue
+                            </a>
+                        </div>
                     </div>
                 </div>
+                <form class="field is-grouped" action="/web/pets/search" method="get">
+                    <p class="control is-expanded">
+                        <input id="q" class="input" type="text" name="q" placeholder="Find a friend">
+                    </p>
+                    <p class="control">
+                        <button type="submit" class="button is-info">
+                            Search
+                        </button>
+                    </p>
+                </form>
+
+
             </div>
         </div>
+    </div>
 </nav>
