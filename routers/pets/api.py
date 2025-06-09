@@ -3,7 +3,7 @@ from fastapi import APIRouter, Request, Depends, Form, File, UploadFile, HTTPExc
 from fastapi.responses import JSONResponse, Response
 from sqlmodel import Session
 
-from routers.pets.web import router
+
 from sqlmodel_conn import get_session
 from sqlmodel_db import PetSQL
 import sqlmodel_ops as crud
