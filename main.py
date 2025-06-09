@@ -47,6 +47,7 @@ from utils import file_utils
 
 from routers.pets import web as pets
 from routers.pets import api as api
+from routers.pets import file as file
 
 
 @asynccontextmanager
@@ -65,6 +66,7 @@ templates = Jinja2Templates(directory="templates")
 
 app.include_router(pets.router, tags=["WEB"], prefix="/web")
 app.include_router(api.router, tags=["API"])
+app.include_router(file.router, tags=["CSV"])
 
 @app.get("/")
 async def home():
@@ -117,14 +119,8 @@ async def create_pet(pet:Pet):
     #pets.append(pet)
     return pet
 
-
-#show all pets
-@app.get("/allpets", response_model=list[PetWithId])
-async def show_all_pets():
-    pets=read_all_pets()
-    return pets
-
-    '''return [
+'''
+    return [
         {
             "id":1,
             "name":"chispas",
@@ -142,41 +138,6 @@ async def show_all_pets():
         }
     ]'''
 
-
-#show one pet
-@app.get("/pet/{pet_id}", response_model=PetWithId)
-async def show_pet(pet_id:int):
-    pet= read_one_pet(pet_id)
-    if not pet:
-        raise HTTPException(status_code=404, detail="Pet doesnt found")
-    return pet
-
-##Adding a pet into the database
-@app.post("/pet", response_model=PetWithId)
-def add_pet(pet:Pet):
-    return new_pet(pet)
-
-
-#modify one pet by ID
-@app.put("/pet/{pet_id}", response_model=PetWithId)
-def update_pet(pet_id:int, pet_update:UpdatedPet):
-    modified=modify_pet(
-        pet_id,pet_update.model_dump(exclude_unset=True),
-    )
-    if not modified:
-        raise HTTPException(status_code=404, detail="Pet not modified")
-
-    return modified
-
-#Delete one pet by the ID
-@app.delete("/pet/{pet_id}", response_model=Pet)
-def delete_one_pet(pet_id:int):
-    removed_pet=remove_pet(pet_id)
-    if not removed_pet:
-        raise HTTPException(
-            status_code=404, detail="Pet not deleted"
-        )
-    return removed_pet
 
 
 
