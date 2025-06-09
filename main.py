@@ -22,6 +22,7 @@ from fastapi.responses import RedirectResponse
 #Imports for templates
 from fastapi.templating import Jinja2Templates
 from starlette.status import HTTP_404_NOT_FOUND
+from starlette.exceptions import HTTPException as StarletteHTTPException
 from websockets.legacy.server import HTTPResponse
 
 import models
@@ -92,6 +93,22 @@ async def http_exception_handler(request,exc):
             "path":request.url.path
         },
     )
+
+@app.exception_handler(StarletteHTTPException)
+async def custom_http_exception_handler(request: Request, exc: StarletteHTTPException):
+    if exc.status_code == 404:
+
+        detail = getattr(exc, "detail", None)
+        return templates.TemplateResponse("404.html", {"request": request, "detail": detail}, status_code=404)
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={
+            "message": "¡Carambas, algo falló!",
+            "detail": str(exc.detail),
+            "path": str(request.url)
+        },
+    )
+
 
 
 @app.get("/error")
