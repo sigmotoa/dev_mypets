@@ -16,6 +16,9 @@ router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
 
+
+
+
 @router.get("/", response_class=HTMLResponse)
 async def home(request: Request):
     return templates.TemplateResponse("pets/home.html", {"request": request})
@@ -79,7 +82,7 @@ async def one_pet(request: Request, pet_id: int, session: Session = Depends(get_
     if pet is None:
         raise HTTPException(
             status_code=404,
-            detail="Mascota no encontrada"
+            detail="Amigo no encontrado"
         )
     # "request": request, "pets": pets, "view_type":"list", "show_actions":False, "show_full_image":False
     return templates.TemplateResponse("pets/pet.html",
