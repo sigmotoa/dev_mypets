@@ -48,6 +48,7 @@ from utils import file_utils
 from routers.pets import web as pets
 from routers.pets import api as api
 from routers.pets import file as file
+from routers.pets import others as others
 
 
 @asynccontextmanager
@@ -67,77 +68,11 @@ templates = Jinja2Templates(directory="templates")
 app.include_router(pets.router, tags=["WEB"], prefix="/web")
 app.include_router(api.router, tags=["API"])
 app.include_router(file.router, tags=["CSV"])
+app.include_router(others.router, tags=["Others"])
 
 @app.get("/")
 async def home():
     return pets.home()
-
-
-
-'''
-    if image:
-        try:
-            image_path = await save_upload_file(image, pet.id, pet.name)
-            pet.image_path = image_path
-            session.add(pet)
-            await session.commit()
-            await session.refresh(pet)
-        except ValueError as e:
-            return JSONResponse(
-                status_code=201,
-                content={
-                    "id":pet.id,
-                    "warning":str(e),
-                    **pet.dict(exclude={"id"})
-                }
-            )
-        return pet
-'''
-
-
-
-
-
-
-
-
-
-''' 
-@asynccontextmanager
-async def lifespan(app:FastAPI):
-    engine = get_engine()
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
-        yield
-    await engine.dispose()
-app = FastAPI(lifespan=lifespan)
-
-'''
-#pets:List[Pet]=[]
-@app.post("/pet", response_model=Pet)
-async def create_pet(pet:Pet):
-    #pets.append(pet)
-    return pet
-
-'''
-    return [
-        {
-            "id":1,
-            "name":"chispas",
-            "kind":"cat"
-        },
-        {
-            "id":2,
-            "name":"pascal",
-            "kind":"cat"
-        },
-        {
-            "id":3,
-            "name":"elefante",
-            "kind":"dog"
-        }
-    ]'''
-
 
 
 
@@ -162,43 +97,4 @@ async def http_exception_handler(request,exc):
 @app.get("/error")
 async def raise_exception():
     raise HTTPException(status_code=400)
-
-
-@app.post("/dbpet", response_model=dict[str, int])
-async def add_pet_db(pet: models.Pet, db_session:Annotated[AsyncSession,Depends(get_db_session)]):
-    pet_id=await db_create_pet(db_session,
-                               pet.name,
-                               pet.breed,
-                               pet.birth,
-                               pet.kind,
-                               pet.female, )
-    return {"Nueva mascota":pet_id}
-
-
-@app.get("/dbpet/{pet_id}", response_model=PetWithId)
-async def one_pet_db(pet_id:int, db_session:Annotated[AsyncSession,Depends(get_db_session)]):
-    pet= await db_get_pet(db_session=db_session, pet_id=pet_id)
-    if pet is None:
-        raise HTTPException(status_code=404, detail="No esta la mascota "+{pet_id})
-    return pet
-
-
-@app.get("/dballpets", response_model=list[PetWithId])
-async def all_pet_db(db_session:Annotated[AsyncSession,Depends(get_db_session)]):
-    pets = await db_get_all_pet(db_session=db_session)
-    if pets is None:
-        raise HTTPException(status_code=404, detail="No tenemos mascotas")
-    return pets
-
-
-@app.put("/dbpet/{pet_id}")
-async def modify_name_db(pet_id:int,new_name:str,db_session:Annotated[AsyncSession, Depends(get_db_session)]):
-    pet = await db_update_pet(db_session=db_session,pet_id=pet_id,new_name=new_name)
-    return pet
-
-
-@app.delete("/dbpet/{pet_id}")
-async def delete_pet_db(pet_id:int, db_session:Annotated[AsyncSession,Depends(get_db_session)]):
-    pet = await db_remove_pet(pet_id=pet_id, db_session=db_session)
-    return pet
 
