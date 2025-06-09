@@ -3,7 +3,7 @@
 {% set show_full_image = show_full_image or false %}
 
 <div class="pet-container {% if view_type == 'detail' %}pet-detail{% elif view_type == 'list' %}pet-list-item{% else %}pet-card{% endif %}">
-<a href="/web/pets/{{ pet.id }}">
+<a href="/pets/{{ pet.id }}">
     {% if view_type == 'detail' %}
 
     <div class="card is-large">
@@ -337,11 +337,11 @@
 
             {% if show_actions %}
             <footer class="card-footer">
-                <a href="/web/pets/{{ pet.id }}" class="card-footer-item">
+                <a href="/pets/{{ pet.id }}" class="card-footer-item">
                     <span class="icon"><i class="mdi mdi-eye"></i></span>
                     <span>Ver</span>
                 </a>
-                <a href="/web/pets/{{ pet.id }}/edit" class="card-footer-item">
+                <a href="/pets/{{ pet.id }}/edit" class="card-footer-item">
                     <span class="icon"><i class="mdi mdi-pencil"></i></span>
                     <span>Editar</span>
                 </a>

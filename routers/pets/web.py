@@ -68,13 +68,13 @@ async def create_pet_process(
 
     session.add(pet)
 
-    return RedirectResponse("/web/pets", status_code=303)
+    return RedirectResponse("/pets", status_code=303)
 
 
 @router.get("/pets/search")
 async def search_pet(q: str):
     id = int(q)
-    return RedirectResponse(f"/web/pets/{id}", status_code=303)
+    return RedirectResponse(f"/pets/{id}", status_code=303)
 
 @router.get("/pets/{pet_id}", response_class=HTMLResponse)
 async def one_pet(request: Request, pet_id: int, session: Session = Depends(get_session)):
