@@ -3,11 +3,13 @@
 {% set show_full_image = show_full_image or false %}
 
 <div class="pet-container {% if view_type == 'detail' %}pet-detail{% elif view_type == 'list' %}pet-list-item{% else %}pet-card{% endif %}">
-
+<a href="/web/pets/{{ pet.id }}">
     {% if view_type == 'detail' %}
 
     <div class="card is-large">
+
         <div class="card-content">
+
             <div class="columns is-variable is-6">
 
                 <!-- Primera columna: Nombre y Foto -->
@@ -139,7 +141,9 @@
                     </p>
                 </div>
                 {% endif %}
+
             </div>
+
         </div>
 
 
@@ -345,4 +349,5 @@
             {% endif %}
         </div>
         {% endif %}
+      </a>
     </div>
