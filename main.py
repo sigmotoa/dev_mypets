@@ -65,7 +65,7 @@ app.mount("/pet_images", StaticFiles(directory="pet_images"), name="pet_images")
 
 templates = Jinja2Templates(directory="templates")
 
-app.include_router(pets.router, tags=["WEB"], prefix="/web")
+app.include_router(pets.router, tags=["WEB"])
 app.include_router(api.router, tags=["API"])
 app.include_router(file.router, tags=["CSV"])
 app.include_router(others.router, tags=["Others"])
