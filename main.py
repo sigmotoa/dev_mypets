@@ -21,6 +21,7 @@ from fastapi.responses import RedirectResponse
 
 #Imports for templates
 from fastapi.templating import Jinja2Templates
+from starlette.status import HTTP_404_NOT_FOUND
 from websockets.legacy.server import HTTPResponse
 
 import models
@@ -66,6 +67,7 @@ app.include_router(pets.router, tags=["WEB"], prefix="/web")
 @app.get("/")
 async def home():
     return pets.home()
+
 
 
 ##Pets with IMAGE
@@ -250,6 +252,8 @@ async def say_hello(name: str):
 
 @app.exception_handler(HTTPException)
 async def http_exception_handler(request,exc):
+    if exc.status_code == HTTP_404_NOT_FOUND:
+        return templates.TemplateResponse("404.html", {"request":request}, status_code=404)
     return JSONResponse(
         status_code=exc.status_code,
         content={
