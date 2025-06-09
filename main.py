@@ -46,6 +46,7 @@ from utils.terms import *
 from utils import file_utils
 
 from routers.pets import web as pets
+from routers.pets import api as api
 
 
 @asynccontextmanager
@@ -63,44 +64,13 @@ app.mount("/pet_images", StaticFiles(directory="pet_images"), name="pet_images")
 templates = Jinja2Templates(directory="templates")
 
 app.include_router(pets.router, tags=["WEB"], prefix="/web")
+app.include_router(api.router, tags=["API"])
 
 @app.get("/")
 async def home():
     return pets.home()
 
 
-
-##Pets with IMAGE
-#Add a pet
-@app.post("/pets", response_model=PetSQL, tags=["SQLMODEL"])
-async def create_pet_img(
-        name: str = Form(...),
-    breed: Optional[str] = Form(None),
-    birth: Optional[int] = Form(None),
-    kind: Optional[Kind] = Form(None),
-    genre: Optional[Genre] = Form(None),
-    image: Optional[UploadFile] = File(None),
-    session: Session = Depends(get_session)
-):
-
-    image_url= await upload_img_supabase(image)
-    #print("OK", image_url)
-
-    pet_data=PetSQL(
-        name=name,
-        breed=breed,
-        birth=birth,
-        kind=kind,
-        genre=genre,
-        image_path=image_url
-
-    )
-    pet = await crud.create_pet_sql(session, pet_data)
-
-    session.add(pet)
-    #await session.commit()
-    #await session.refresh(pet)
-    return pet
 
 '''
     if image:
